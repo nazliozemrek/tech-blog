@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User } = require('../../models');
+const { User,Post,Comment } = require('../../models');
 
 
 router.get('/', (req, res) => {
@@ -43,6 +43,7 @@ router.post('/', (req, res) => {
 });
 router.put('/:id', (req, res) => {
     User.update(req.body, {
+        individualHooks:true,
         where: {
             id: req.params.id
         }
@@ -59,6 +60,26 @@ router.put('/:id', (req, res) => {
             res.status(500).json(err);
         });
 });
+router.post('/login',(req,res)=>{
+    User.findOne({
+        where:{
+            username:req.body.username
+        }
+    })
+    .then(userData => {
+        if(!userData){
+            res.status(400).json({message:'no user'})
+            return;
+        }
+        //res.json({user:userData});
+        const validPassword = userData.checkPassword(req.body.password);
+        if(!validPassword){
+            res.status(400).json({message:'incorrect pw'});
+            return;
+        }
+        res.json({user:userData,message:'You are now logged in'});
+    });
+})
 router.delete('/:id', (req, res) => {
     User.destroy({
         where: {
