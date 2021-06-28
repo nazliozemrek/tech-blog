@@ -13,10 +13,6 @@ router.get('/',(req,res)=> {
                     model:User,
                     attributes:['username']
                 }
-            },
-            {
-                model:User,
-                attributes:['username']
             }
         ]
     })
@@ -39,10 +35,6 @@ router.get('/:id',(req,res)=> {
                     model:User,
                     attributes:['username']
                 }
-            },
-            {
-                model:User,
-                attributes:['username']
             }
         ]
     })
